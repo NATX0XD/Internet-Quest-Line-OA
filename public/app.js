@@ -621,9 +621,16 @@ function drawCheckinChart(history) {
       }],
     },
     options: {
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+      responsive: true,
       maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function (c) { return c.parsed.y + ' แต้ม'; } } },
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 7, font: { size: 10 } } },
+        y: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: '#f0eef9' }, border: { display: false } },
+      },
     },
   });
 }
@@ -645,9 +652,18 @@ function drawCategoryChart(cats) {
       }],
     },
     options: {
-      scales: { r: { min: 0, max: 100, ticks: { stepSize: 25 }, pointLabels: { font: { size: 10 } } } },
-      plugins: { legend: { display: false } },
+      responsive: true,
       maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { stepSize: 25, font: { size: 9 }, backdropColor: 'transparent' },
+          pointLabels: { font: { size: 9 } },
+          grid: { color: '#ece9fb' },
+          angleLines: { color: '#ece9fb' },
+        },
+      },
+      plugins: { legend: { display: false } },
     },
   });
 }

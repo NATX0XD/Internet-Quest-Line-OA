@@ -12,7 +12,11 @@
  */
 
 import crypto from 'node:crypto';
-import { reply, textMessage, leaderboardCarousel, progressCard, welcomeCard } from '../../lib/push.js';
+import {
+  reply, textMessage, withQuickReply,
+  leaderboardCarousel, progressCard, welcomeCard,
+  helpCard, linkCard, needLoginCard,
+} from '../../lib/push.js';
 import { userIdByLineId, leaderboard, getDashboard } from '../../lib/store.js';
 
 // ปิดการแปลง body อัตโนมัติ เพราะการตรวจลายเซ็นต้องใช้ข้อมูลดิบตรงตามที่ LINE ส่งมา
@@ -40,16 +44,6 @@ function validSignature(body, signature) {
 
 /* -------------------- คำสั่งที่รองรับ -------------------- */
 
-const HELP = [
-  'พิมพ์คำเหล่านี้เพื่อดูข้อมูลได้เลย',
-  '',
-  '• อันดับ — ดูกระดานอันดับแบบเลื่อนดูทีละคน',
-  '• แต้ม — ดูคะแนนสะสมและความคืบหน้าของตัวเอง',
-  '• เช็คอิน — เปิดหน้าเช็คอินประจำวัน',
-  '• ควิซ — เปิดหน้าแบบทดสอบ',
-  '• บทเรียน — เปิดบทเรียนทั้ง 6 หน่วย',
-].join('\n');
-
 function matches(text, words) {
   return words.some((w) => text.includes(w));
 }
@@ -58,37 +52,58 @@ async function handleText(event) {
   const lineUserId = event.source?.userId;
   const text = String(event.message?.text || '').trim().toLowerCase();
 
-  if (matches(text, ['ช่วย', 'help', 'เมนู', 'คำสั่ง', 'ทำอะไรได้'])) {
-    return [textMessage(HELP)];
+  if (matches(text, ['ช่วยเหลือ', 'ช่วย', 'help', 'เมนู', 'คำสั่ง', 'ทำอะไรได้'])) {
+    return [helpCard()];
   }
 
   if (matches(text, ['เช็คอิน', 'checkin', 'check in'])) {
-    return [textMessage(`เช็คอินรับแต้มประจำวันที่นี่\n${SITE}/#checkin`)];
+    return [linkCard({
+      header: 'เช็คอินประจำวัน',
+      color: '#4361EE',
+      title: 'รับแต้มวันนี้',
+      subtitle: 'เช็คอินต่อเนื่องยิ่งหลายวัน ยิ่งได้แต้มโบนัสมากขึ้น สูงสุด 60 แต้มต่อวัน',
+      label: 'ไปหน้าเช็คอิน',
+      path: '/#checkin',
+    })];
   }
   if (matches(text, ['ควิซ', 'quiz', 'แบบทดสอบ', 'ข้อสอบ'])) {
-    return [textMessage(`ทำแบบทดสอบ 6 หมวด หมวดละ 10 ข้อ พร้อมเฉลย\n${SITE}/#quiz`)];
+    return [linkCard({
+      header: 'แบบทดสอบ',
+      color: '#560BAD',
+      title: '6 หมวด 60 ข้อ',
+      subtitle: 'ทำหมวดละ 10 ข้อ ส่งแล้วเห็นเฉลยพร้อมเหตุผลทุกข้อ ผ่านเกณฑ์ 60% รับแต้มโบนัส',
+      label: 'เลือกหมวดที่จะทำ',
+      path: '/#quiz',
+    })];
   }
   if (matches(text, ['บทเรียน', 'เรียน', 'lesson'])) {
-    return [textMessage(`บทเรียนทั้ง 6 หน่วย\n${SITE}/#lesson`)];
+    return [linkCard({
+      header: 'บทเรียน',
+      color: '#4895EF',
+      title: '6 หน่วยการเรียน',
+      subtitle: 'อินเทอร์เน็ตเบื้องต้น เว็บเบราว์เซอร์ การสืบค้น อีเมลและธุรกรรม สื่อสังคมออนไลน์ และความปลอดภัย',
+      label: 'เปิดบทเรียน',
+      path: '/#lesson',
+    })];
   }
 
   const wantsRank = matches(text, ['อันดับ', 'rank', 'leaderboard', 'กระดาน', 'ที่เท่าไร']);
   const wantsPoints = matches(text, ['แต้ม', 'คะแนน', 'point', 'score', 'ความคืบหน้า']);
   if (!wantsRank && !wantsPoints) {
-    return [textMessage(`ไม่เข้าใจคำสั่งนี้\n\n${HELP}`)];
+    return [
+      textMessage('ยังไม่รู้จักคำนี้ ลองเลือกจากเมนูด้านล่างดูนะ'),
+      helpCard(),
+    ];
   }
 
   const userId = lineUserId ? await userIdByLineId(lineUserId) : null;
-  if (!userId) {
-    return [textMessage(
-      'ยังไม่พบข้อมูลของคุณในระบบ\n\n' +
-      `เข้าเว็บแล้วกดเข้าสู่ระบบด้วย LINE หนึ่งครั้งก่อน จากนั้นกลับมาพิมพ์ใหม่ได้เลย\n${SITE}`
-    )];
-  }
+  if (!userId) return [needLoginCard()];
 
   if (wantsRank) {
     const board = await leaderboard(userId);
-    if (!board.top.length) return [textMessage('ยังไม่มีผู้เรียนในระบบ')];
+    if (!board.top.length) {
+      return [textMessage('ยังไม่มีผู้เรียนคนไหนในระบบ เป็นคนแรกเลยไหม')];
+    }
     return [leaderboardCarousel(board.top, board.me)];
   }
 
@@ -99,10 +114,7 @@ async function handleEvent(event) {
   try {
     if (event.type === 'follow') {
       // ผู้ใช้เพิ่งกด add friend ทักทายและบอกวิธีใช้
-      return [
-        welcomeCard('ผู้เรียน'),
-        textMessage(HELP),
-      ];
+      return [welcomeCard('ผู้เรียน'), helpCard()];
     }
     if (event.type === 'message' && event.message?.type === 'text') {
       return await handleText(event);
@@ -139,7 +151,9 @@ export default async function handler(req, res) {
 
   for (const event of events) {
     const messages = await handleEvent(event);
-    if (messages.length && event.replyToken) await reply(event.replyToken, messages);
+    if (messages.length && event.replyToken) {
+      await reply(event.replyToken, withQuickReply(messages));
+    }
   }
 
   res.status(200).send('ok');

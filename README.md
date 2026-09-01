@@ -99,6 +99,7 @@ Project Settings > Environment Variables ใส่ครบทุกค่า (�
 | `LINE_CHANNEL_ID` | Channel ID จากขั้นที่ 3 |
 | `LINE_CHANNEL_SECRET` | Channel secret จากขั้นที่ 3 |
 | `LIFF_ID` | เว้นว่างก่อนได้ |
+| `LINE_MESSAGING_TOKEN` | เว้นว่างได้ ใส่เมื่อต้องการส่งการ์ดแจ้งผลเข้าแชท |
 | `APP_BASE_URL` | โดเมน production เช่น `https://internet-quest.vercel.app` — ตั้ง Type เป็น **Config** ไม่ใช่ Secret |
 | `SHEET_ID` | จากขั้นที่ 1 |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | เนื้อหาไฟล์ JSON ทั้งก้อนจากขั้นที่ 2 |
@@ -167,6 +168,29 @@ npx vercel dev
 | GET | `/api/history` | ใช่ | ประวัติการทำ Quiz |
 | GET | `/api/leaderboard` | ใช่ | อันดับคะแนน |
 | POST | `/api/setup?key=` | ADMIN_KEY | สร้างชีตและข้อมูลตั้งต้น |
+
+## แจ้งเตือนเข้าแชท LINE
+
+ถ้าตั้ง `LINE_MESSAGING_TOKEN` ระบบจะส่ง Flex message เข้าแชทของผู้เรียนรายบุคคลเมื่อ
+
+| เหตุการณ์ | การ์ดที่ส่ง |
+|---|---|
+| ผูกบัญชีเข้าระบบครั้งแรก | ทักทายพร้อมสรุปสิ่งที่ทำได้ |
+| เช็คอินสำเร็จ | แต้มที่ได้ สตรีค คะแนนสะสม ระดับปัจจุบัน |
+| ส่งแบบทดสอบ | คะแนน ผ่านหรือไม่ผ่าน แต้มที่ได้ |
+| ได้รับเหรียญตราใหม่ | รายชื่อเหรียญที่เพิ่งปลดล็อก |
+
+เงื่อนไขที่ต้องครบ
+
+1. ผู้เรียนต้อง **เป็นเพื่อนกับ LINE OA** ก่อน ไม่งั้น LINE ตอบ 403
+2. LINE Login channel กับ OA ต้องอยู่ **provider เดียวกัน** ไม่งั้น `userId` คนละชุด ส่งไม่ถึง
+
+วิธีเอา token: LINE Developers Console → Messaging API channel → แท็บ **Messaging API**
+→ หัวข้อ **Channel access token (long-lived)** → กด Issue → คัดลอกไปใส่ env แล้ว Redeploy
+
+> ทุกข้อความนับรวมในโควตาข้อความรายเดือนของแผน LINE OA ที่ใช้อยู่
+> ระบบจึงส่งเฉพาะเหตุการณ์สำคัญ ไม่ส่งทุกครั้งที่เข้าเว็บ
+> ถ้าไม่ตั้ง token ระบบจะข้ามการส่งเงียบ ๆ ส่วนอื่นทำงานปกติ
 
 ## ความปลอดภัย
 

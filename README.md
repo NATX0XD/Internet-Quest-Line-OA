@@ -100,6 +100,7 @@ Project Settings > Environment Variables ใส่ครบทุกค่า (�
 | `LINE_CHANNEL_SECRET` | Channel secret จากขั้นที่ 3 |
 | `LIFF_ID` | เว้นว่างก่อนได้ |
 | `LINE_MESSAGING_TOKEN` | เว้นว่างได้ ใส่เมื่อต้องการส่งการ์ดแจ้งผลเข้าแชท |
+| `LINE_MESSAGING_CHANNEL_SECRET` | เว้นว่างได้ ใส่เมื่อต้องการให้พิมพ์คุยกับบอทได้ |
 | `APP_BASE_URL` | โดเมน production เช่น `https://internet-quest.vercel.app` — ตั้ง Type เป็น **Config** ไม่ใช่ Secret |
 | `SHEET_ID` | จากขั้นที่ 1 |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | เนื้อหาไฟล์ JSON ทั้งก้อนจากขั้นที่ 2 |
@@ -168,6 +169,7 @@ npx vercel dev
 | GET | `/api/history` | ใช่ | ประวัติการทำ Quiz |
 | GET | `/api/leaderboard` | ใช่ | อันดับคะแนน |
 | POST | `/api/setup?key=` | ADMIN_KEY | สร้างชีตและข้อมูลตั้งต้น |
+| POST | `/api/line/webhook` | ลายเซ็น LINE | รับข้อความจากแชทแล้วตอบกลับ |
 
 ## แจ้งเตือนเข้าแชท LINE
 
@@ -188,7 +190,28 @@ npx vercel dev
 วิธีเอา token: LINE Developers Console → Messaging API channel → แท็บ **Messaging API**
 → หัวข้อ **Channel access token (long-lived)** → กด Issue → คัดลอกไปใส่ env แล้ว Redeploy
 
-> ทุกข้อความนับรวมในโควตาข้อความรายเดือนของแผน LINE OA ที่ใช้อยู่
+### พิมพ์คุยกับบอทในแชท
+
+ตั้ง `LINE_MESSAGING_CHANNEL_SECRET` เพิ่ม แล้วตั้ง Webhook URL ที่
+LINE Developers Console → Messaging API channel → **Webhook URL**
+
+```
+https://internet-quest.vercel.app/api/line/webhook
+```
+
+เปิดสวิตช์ **Use webhook** ด้วย จากนั้นผู้เรียนพิมพ์คำเหล่านี้ได้
+
+| พิมพ์ | ได้อะไร |
+|---|---|
+| `อันดับ` | กระดานอันดับแบบการ์ดเลื่อนซ้ายขวา เห็นรูป ชื่อ ระดับ แต้ม ของแต่ละคน |
+| `แต้ม` | การ์ดสรุปคะแนน อันดับ สตรีค บทเรียนที่จบ เหรียญของตัวเอง |
+| `เช็คอิน` / `ควิซ` / `บทเรียน` | ลิงก์เข้าหน้านั้นโดยตรง |
+| `ช่วย` | รายการคำสั่งทั้งหมด |
+
+การตอบกลับใช้ **reply token** ซึ่ง **ไม่นับรวมในโควตาข้อความรายเดือน** ต่างจาก push
+ระบบตรวจลายเซ็น `X-Line-Signature` ทุกคำขอ ปฏิเสธคำขอปลอมด้วยสถานะ 403
+
+> ทุกข้อความที่ระบบส่งเองแบบ push นับรวมในโควตาข้อความรายเดือนของแผน LINE OA ที่ใช้อยู่
 > ระบบจึงส่งเฉพาะเหตุการณ์สำคัญ ไม่ส่งทุกครั้งที่เข้าเว็บ
 > ถ้าไม่ตั้ง token ระบบจะข้ามการส่งเงียบ ๆ ส่วนอื่นทำงานปกติ
 

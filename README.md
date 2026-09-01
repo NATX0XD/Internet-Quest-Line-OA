@@ -99,7 +99,7 @@ Project Settings > Environment Variables ใส่ครบทุกค่า (�
 | `LINE_CHANNEL_ID` | Channel ID จากขั้นที่ 3 |
 | `LINE_CHANNEL_SECRET` | Channel secret จากขั้นที่ 3 |
 | `LIFF_ID` | เว้นว่างก่อนได้ |
-| `PUBLIC_URL` | โดเมน production เช่น `https://internet-quest.vercel.app` (ห้ามมี `/` ปิดท้าย) |
+| `APP_BASE_URL` | โดเมน production เช่น `https://internet-quest.vercel.app` — ตั้ง Type เป็น **Config** ไม่ใช่ Secret |
 | `SHEET_ID` | จากขั้นที่ 1 |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | เนื้อหาไฟล์ JSON ทั้งก้อนจากขั้นที่ 2 |
 | `SESSION_SECRET` | สุ่มด้วย `openssl rand -hex 32` |
@@ -115,7 +115,7 @@ LINE Login channel > แท็บ **LINE Login** > Callback URL ใส่
 https://<โดเมนของคุณ>/api/auth/callback
 ```
 
-ต้องตรงกับ `PUBLIC_URL` ที่ตั้งไว้
+ต้องตรงกับ `APP_BASE_URL` ที่ตั้งไว้
 
 ### 7. สร้างตารางและข้อมูลตั้งต้น
 
@@ -133,7 +133,7 @@ curl -X POST "https://<โดเมนของคุณ>/api/setup?key=<ADMIN_K
 ### 8. (ไม่บังคับ) เพิ่ม LIFF สำหรับ Rich Menu
 
 1. LINE Login channel > แท็บ **LIFF** > Add
-   Endpoint URL = `PUBLIC_URL`, Size = Full, scope `profile` + `openid`
+   Endpoint URL = `APP_BASE_URL`, Size = Full, scope `profile` + `openid`
 2. คัดลอก LIFF ID ไปใส่ env `LIFF_ID` แล้ว Redeploy
 3. เอา `https://liff.line.me/<LIFF_ID>` ไปใส่ปุ่มใน Rich Menu ของ LINE OA
    เปิดจากแอป LINE จะเข้าสู่ระบบทันทีโดยไม่ต้องเปลี่ยนหน้า
@@ -146,7 +146,7 @@ npx vercel dev
 ```
 
 ตอนพัฒนาในเครื่อง ให้เพิ่ม `http://localhost:3000/api/auth/callback` เข้าไปใน Callback URL ของ LINE ด้วย
-และตั้ง `PUBLIC_URL=http://localhost:3000` ใน `.env.local`
+และตั้ง `APP_BASE_URL=http://localhost:3000` ใน `.env.local`
 
 > cookie เซสชันตั้งค่า `Secure` ไว้ ถ้าทดสอบบน `http://localhost` บางเบราว์เซอร์ยังยอมรับ
 > แต่ถ้าไม่ยอมให้ใช้ `vercel dev --listen 3000` คู่กับ tunnel ที่เป็น https

@@ -3,3 +3,12 @@ node_modules
 .env
 .env.local
 .DS_Store
+
+# ข้อมูลลับ ห้าม commit เด็ดขาด
+*.json.key
+*-*.json.credentials
+service-account*.json
+*service_account*.json
+gcp-*.json
+# ไฟล์คีย์ของ Google Cloud ที่ดาวน์โหลดมา มักตั้งชื่อเป็น <project>-<hash>.json
+internet-quest-line-oa-*.json

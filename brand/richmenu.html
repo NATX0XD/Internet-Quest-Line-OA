@@ -8,83 +8,88 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{width:2500px;height:1686px;overflow:hidden;font-family:'Noto Sans Thai',sans-serif}
 
-  /* ตาราง 3 คอลัมน์ 2 แถว ช่องละ 833.33 x 843 ตรงกับพิกัดในไฟล์ areas.json */
   .menu{
-    width:2500px;height:1686px;display:grid;
+    width:2500px;height:1686px;position:relative;
+    background:#241155 url('ai-richmenu.jpg') center/cover no-repeat;
+  }
+  /* คลุมทั้งภาพให้เข้มขึ้นเล็กน้อย ตัวหนังสือขาวจะอ่านง่ายทุกช่อง */
+  .menu::before{
+    content:'';position:absolute;inset:0;background:rgba(14,4,44,.30);
+  }
+
+  /* ตาราง 3 คอลัมน์ 2 แถว ช่องละ 833.33 x 843 ตรงกับพิกัดใน richmenu-areas.json */
+  .grid{
+    position:relative;width:100%;height:100%;display:grid;
     grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);
-    background:#3a0ca3;
   }
   .cell{
     position:relative;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;color:#fff;overflow:hidden;
-    border-right:3px solid rgba(255,255,255,.16);
-    border-bottom:3px solid rgba(255,255,255,.16);
+    align-items:center;justify-content:center;color:#fff;
+    border-right:3px solid rgba(255,255,255,.20);
+    border-bottom:3px solid rgba(255,255,255,.20);
   }
   .cell:nth-child(3n){border-right:none}
   .cell:nth-child(n+4){border-bottom:none}
-
-  .cell .bubble{
-    position:absolute;border-radius:50%;background:rgba(255,255,255,.10);
-  }
-  .b1{width:300px;height:300px;top:-110px;right:-90px}
-  .b2{width:200px;height:200px;bottom:-80px;left:-60px}
+  /* แต้มสีประจำหมวดทับบาง ๆ ให้แยกช่องออกจากกันโดยยังเห็นพื้นหลัง */
+  .cell::before{content:'';position:absolute;inset:0}
+  .c1::before{background:linear-gradient(150deg,rgba(67,97,238,.62),rgba(72,149,239,.42))}
+  .c2::before{background:linear-gradient(150deg,rgba(72,149,239,.58),rgba(76,201,240,.40))}
+  .c3::before{background:linear-gradient(150deg,rgba(114,9,183,.62),rgba(86,11,173,.46))}
+  .c4::before{background:linear-gradient(150deg,rgba(86,11,173,.62),rgba(58,12,163,.46))}
+  .c5::before{background:linear-gradient(150deg,rgba(181,23,158,.60),rgba(247,37,133,.44))}
+  .c6::before{background:linear-gradient(150deg,rgba(58,12,163,.62),rgba(114,9,183,.46))}
 
   .ico{
-    position:relative;width:210px;height:210px;border-radius:64px;
-    background:rgba(255,255,255,.20);border:4px solid rgba(255,255,255,.35);
+    position:relative;width:206px;height:206px;border-radius:62px;
+    background:rgba(255,255,255,.19);border:4px solid rgba(255,255,255,.40);
     display:flex;align-items:center;justify-content:center;
-    font-size:108px;margin-bottom:38px;
-    box-shadow:0 18px 44px rgba(10,2,40,.28);
+    font-size:104px;margin-bottom:36px;
+    box-shadow:0 20px 48px rgba(8,2,34,.42);
+    backdrop-filter:blur(8px);
   }
-  .label{position:relative;font-size:74px;font-weight:800;letter-spacing:.5px;
-         text-shadow:0 8px 22px rgba(10,2,40,.35)}
-  .note{position:relative;font-size:38px;font-weight:600;margin-top:12px;opacity:.88}
-
-  .c1{background:linear-gradient(140deg,#4361ee,#4895ef)}
-  .c2{background:linear-gradient(140deg,#4895ef,#4cc9f0)}
-  .c3{background:linear-gradient(140deg,#7209b7,#560bad)}
-  .c4{background:linear-gradient(140deg,#560bad,#3a0ca3)}
-  .c5{background:linear-gradient(140deg,#b5179e,#f72585)}
-  .c6{background:linear-gradient(140deg,#3a0ca3,#7209b7)}
+  .label{
+    position:relative;font-size:74px;font-weight:800;letter-spacing:.5px;
+    text-shadow:0 8px 26px rgba(8,2,34,.75),0 2px 8px rgba(8,2,34,.6);
+  }
+  .note{
+    position:relative;font-size:37px;font-weight:600;margin-top:12px;
+    text-shadow:0 4px 16px rgba(8,2,34,.75);
+  }
 </style>
 </head>
 <body>
   <div class="menu">
-    <div class="cell c1">
-      <div class="bubble b1"></div><div class="bubble b2"></div>
-      <div class="ico"><i class="fa-solid fa-calendar-check"></i></div>
-      <div class="label">เช็คอิน</div>
-      <div class="note">รับแต้มทุกวัน</div>
-    </div>
-    <div class="cell c2">
-      <div class="bubble b1"></div><div class="bubble b2"></div>
-      <div class="ico"><i class="fa-solid fa-book"></i></div>
-      <div class="label">บทเรียน</div>
-      <div class="note">6 หน่วยการเรียน</div>
-    </div>
-    <div class="cell c3">
-      <div class="bubble b1"></div><div class="bubble b2"></div>
-      <div class="ico"><i class="fa-solid fa-clipboard-question"></i></div>
-      <div class="label">Quiz</div>
-      <div class="note">6 หมวด หมวดละ 10 ข้อ</div>
-    </div>
-    <div class="cell c4">
-      <div class="bubble b1"></div><div class="bubble b2"></div>
-      <div class="ico"><i class="fa-solid fa-medal"></i></div>
-      <div class="label">เหรียญตรา</div>
-      <div class="note">สะสมครบ 12 ใบ</div>
-    </div>
-    <div class="cell c5">
-      <div class="bubble b1"></div><div class="bubble b2"></div>
-      <div class="ico"><i class="fa-solid fa-trophy"></i></div>
-      <div class="label">อันดับ</div>
-      <div class="note">คะแนนสูงสุด</div>
-    </div>
-    <div class="cell c6">
-      <div class="bubble b1"></div><div class="bubble b2"></div>
-      <div class="ico"><i class="fa-solid fa-globe"></i></div>
-      <div class="label">เข้าเว็บเรียน</div>
-      <div class="note">internet-quest.vercel.app</div>
+    <div class="grid">
+      <div class="cell c1">
+        <div class="ico"><i class="fa-solid fa-calendar-check"></i></div>
+        <div class="label">เช็คอิน</div>
+        <div class="note">รับแต้มทุกวัน</div>
+      </div>
+      <div class="cell c2">
+        <div class="ico"><i class="fa-solid fa-book"></i></div>
+        <div class="label">บทเรียน</div>
+        <div class="note">6 หน่วยการเรียน</div>
+      </div>
+      <div class="cell c3">
+        <div class="ico"><i class="fa-solid fa-clipboard-question"></i></div>
+        <div class="label">Quiz</div>
+        <div class="note">6 หมวด หมวดละ 10 ข้อ</div>
+      </div>
+      <div class="cell c4">
+        <div class="ico"><i class="fa-solid fa-medal"></i></div>
+        <div class="label">เหรียญตรา</div>
+        <div class="note">สะสมครบ 12 ใบ</div>
+      </div>
+      <div class="cell c5">
+        <div class="ico"><i class="fa-solid fa-trophy"></i></div>
+        <div class="label">อันดับ</div>
+        <div class="note">คะแนนสูงสุด</div>
+      </div>
+      <div class="cell c6">
+        <div class="ico"><i class="fa-solid fa-globe"></i></div>
+        <div class="label">เข้าเว็บเรียน</div>
+        <div class="note">internet-quest.vercel.app</div>
+      </div>
     </div>
   </div>
 </body>

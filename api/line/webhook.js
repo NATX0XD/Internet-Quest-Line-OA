@@ -13,7 +13,7 @@
 
 import crypto from 'node:crypto';
 import {
-  reply, textMessage, withQuickReply,
+  reply, textMessage,
   leaderboardCarousel, progressCard, welcomeCard,
   helpCard, linkCard, needLoginCard,
 } from '../../lib/push.js';
@@ -151,9 +151,8 @@ export default async function handler(req, res) {
 
   for (const event of events) {
     const messages = await handleEvent(event);
-    if (messages.length && event.replyToken) {
-      await reply(event.replyToken, withQuickReply(messages));
-    }
+    // reply() แนบปุ่มลัดให้เองแล้ว ไม่ต้องเรียกซ้ำที่นี่
+    if (messages.length && event.replyToken) await reply(event.replyToken, messages);
   }
 
   res.status(200).send('ok');

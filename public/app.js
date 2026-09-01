@@ -110,6 +110,7 @@ async function loadDashboard() {
     onDashboard(d);
     el('loginScreen').style.display = 'none';
     el('app').classList.remove('d-none');
+    openTabFromHash();
   } catch (err) {
     if (err.status === 401) { goLine(); return; }
     showLoginError(err.message);
@@ -166,19 +167,35 @@ function onDashboard(d) {
 /* =========================================================
    แท็บ
    ========================================================= */
-document.addEventListener('click', function (e) {
-  var btn = e.target.closest('.tab-btn');
-  if (!btn) return;
-  var name = btn.dataset.tab;
-  document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
-  ['checkin', 'lesson', 'quiz', 'badge', 'rank'].forEach(function (t) {
-    el('tab-' + t).classList.toggle('d-none', t !== name);
+var TABS = ['checkin', 'lesson', 'quiz', 'badge', 'rank'];
+
+function switchTab(name, scroll) {
+  if (TABS.indexOf(name) < 0) return;
+  document.querySelectorAll('.tab-btn').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.tab === name);
   });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  TABS.forEach(function (t) { el('tab-' + t).classList.toggle('d-none', t !== name); });
+  if (scroll !== false) window.scrollTo({ top: 0, behavior: 'smooth' });
+
   if (name === 'lesson' && !STATE.lessons) loadLessons();
   if (name === 'rank') loadLeaderboard();
   if (name === 'quiz') loadHistory();
+}
+
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  switchTab(btn.dataset.tab);
+  history.replaceState(null, '', '#' + btn.dataset.tab);
 });
+
+/** เปิดแท็บตาม hash เพื่อให้ปุ่มใน Rich Menu ของ LINE ลิงก์ตรงเข้าแต่ละหน้าได้ */
+function openTabFromHash() {
+  var name = (location.hash || '').replace('#', '');
+  if (TABS.indexOf(name) >= 0) switchTab(name, false);
+}
+
+window.addEventListener('hashchange', openTabFromHash);
 
 /* =========================================================
    เช็คอิน

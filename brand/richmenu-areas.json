@@ -1,0 +1,32 @@
+{
+  "size": { "width": 2500, "height": 1686 },
+  "selected": true,
+  "name": "Internet Quest main menu",
+  "chatBarText": "เมนูการเรียน",
+  "areas": [
+    {
+      "bounds": { "x": 0, "y": 0, "width": 833, "height": 843 },
+      "action": { "type": "uri", "label": "เช็คอิน", "uri": "https://internet-quest.vercel.app/#checkin" }
+    },
+    {
+      "bounds": { "x": 833, "y": 0, "width": 833, "height": 843 },
+      "action": { "type": "uri", "label": "บทเรียน", "uri": "https://internet-quest.vercel.app/#lesson" }
+    },
+    {
+      "bounds": { "x": 1666, "y": 0, "width": 834, "height": 843 },
+      "action": { "type": "uri", "label": "Quiz", "uri": "https://internet-quest.vercel.app/#quiz" }
+    },
+    {
+      "bounds": { "x": 0, "y": 843, "width": 833, "height": 843 },
+      "action": { "type": "uri", "label": "เหรียญตรา", "uri": "https://internet-quest.vercel.app/#badge" }
+    },
+    {
+      "bounds": { "x": 833, "y": 843, "width": 833, "height": 843 },
+      "action": { "type": "uri", "label": "อันดับ", "uri": "https://internet-quest.vercel.app/#rank" }
+    },
+    {
+      "bounds": { "x": 1666, "y": 843, "width": 834, "height": 843 },
+      "action": { "type": "uri", "label": "เข้าเว็บเรียน", "uri": "https://internet-quest.vercel.app/" }
+    }
+  ]
+}

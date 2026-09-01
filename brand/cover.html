@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:878px;overflow:hidden;font-family:'Noto Sans Thai',sans-serif}
+  .wrap{
+    width:1080px;height:878px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#3a0ca3 0%,#4361ee 32%,#7209b7 68%,#b5179e 100%);
+    color:#fff;
+  }
+  .glow{position:absolute;border-radius:50%;background:rgba(255,255,255,.10)}
+  .g1{width:520px;height:520px;top:-190px;right:-150px}
+  .g2{width:380px;height:380px;bottom:-160px;left:-120px}
+  .g3{width:200px;height:200px;top:120px;left:80px;background:rgba(255,255,255,.07)}
+
+  /* เนื้อหาหลักอยู่ครึ่งบน เพราะครึ่งล่างจะถูกรูปโปรไฟล์และชื่อบัญชีทับ */
+  .content{position:relative;padding:96px 80px 0;text-align:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:12px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+    padding:12px 26px;border-radius:999px;font-size:24px;font-weight:700;
+  }
+  h1{font-size:82px;font-weight:800;margin-top:26px;letter-spacing:1px;
+     text-shadow:0 10px 30px rgba(15,5,50,.35)}
+  h2{font-size:38px;font-weight:700;margin-top:14px;color:#ffe89b}
+  .desc{font-size:26px;font-weight:500;margin-top:18px;opacity:.92;line-height:1.6}
+
+  .chips{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:38px}
+  .chip{
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.26);
+    border-radius:999px;padding:11px 22px;font-size:21px;font-weight:700;
+    display:flex;align-items:center;gap:10px;
+  }
+  .chip i{font-size:19px;opacity:.9}
+
+  /* แถบล่างเว้นไว้ให้รูปโปรไฟล์กับชื่อบัญชีของ LINE ทับได้โดยไม่บังข้อความ */
+  .safezone{
+    position:absolute;left:0;right:0;bottom:0;height:250px;
+    background:linear-gradient(to top,rgba(20,5,60,.42),rgba(20,5,60,0));
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+
+    <div class="content">
+      <div class="badge"><i class="fa-solid fa-graduation-cap"></i> ระบบการเรียนรู้ออนไลน์</div>
+      <h1>Internet Quest</h1>
+      <h2>21910-2002 อินเทอร์เน็ตในงานธุรกิจดิจิทัล</h2>
+      <div class="desc">
+        เรียน ทบทวน ทำแบบทดสอบ สะสมแต้มและเหรียญตรา<br>
+        เข้าสู่ระบบด้วยบัญชี LINE ของตนเองได้ทันที
+      </div>
+
+      <div class="chips">
+        <div class="chip"><i class="fa-solid fa-calendar-check"></i> เช็คอินรายวัน</div>
+        <div class="chip"><i class="fa-solid fa-book"></i> บทเรียน 6 หน่วย</div>
+        <div class="chip"><i class="fa-solid fa-clipboard-question"></i> Quiz 60 ข้อ</div>
+        <div class="chip"><i class="fa-solid fa-medal"></i> เหรียญตรา 12 ใบ</div>
+        <div class="chip"><i class="fa-solid fa-trophy"></i> จัดอันดับคะแนน</div>
+      </div>
+    </div>
+
+    <div class="safezone"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:640px;height:640px;overflow:hidden;font-family:'Noto Sans Thai',sans-serif}
+  .wrap{
+    width:640px;height:640px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#4361ee 0%,#7209b7 55%,#b5179e 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  /* วงกลมประดับ วางให้ไม่ชนกับพื้นที่ที่ LINE ครอบเป็นวงกลม */
+  .glow{position:absolute;border-radius:50%;background:rgba(255,255,255,.13)}
+  .g1{width:340px;height:340px;top:-120px;left:-110px}
+  .g2{width:260px;height:260px;bottom:-90px;right:-70px}
+  .ring{
+    position:absolute;width:520px;height:520px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.22);
+  }
+  .icon{
+    position:relative;font-size:190px;color:#fff;line-height:1;
+    text-shadow:0 12px 34px rgba(20,5,60,.35);
+  }
+  .name{
+    position:relative;margin-top:26px;color:#fff;font-weight:800;
+    font-size:56px;letter-spacing:.5px;text-shadow:0 6px 18px rgba(20,5,60,.3);
+  }
+  .sub{
+    position:relative;margin-top:6px;color:#ffe89b;font-weight:700;font-size:26px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="ring"></div>
+    <i class="fa-solid fa-globe icon"></i>
+    <div class="name">Internet Quest</div>
+    <div class="sub">21910-2002</div>
+  </div>
+</body>
+</html>

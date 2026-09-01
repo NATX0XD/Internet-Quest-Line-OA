@@ -11,7 +11,8 @@ function doGet(e) {
     return page_('Setup', { webAppUrl: safeUrl_() });
   }
 
-  let boot = { token: '', user: null, error: '' };
+  // tab ใช้สำหรับลิงก์ตรงจากปุ่มใน Rich Menu เช่น .../exec?tab=quiz
+  let boot = { token: '', user: null, error: '', tab: String(p.tab || '') };
 
   if (p.code) {
     const res = loginWithCode(p.code, p.state);

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Internet Quest — อินเทอร์เน็ตในงานธุรกิจดิจิทัล</title>
+  <meta name="description" content="ระบบการเรียนรู้แบบสะสมแต้ม วิชา 21910-2002 อินเทอร์เน็ตในงานธุรกิจดิจิทัล เข้าสู่ระบบด้วย LINE">
+  <meta name="theme-color" content="#7209b7">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- ===================== หน้าเข้าสู่ระบบ ===================== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><i class="fa-solid fa-globe"></i></div>
+    <h1 class="login-title">Internet Quest</h1>
+    <p class="login-sub">ระบบการเรียนรู้แบบสะสมแต้ม<br>วิชา 21910-2002 อินเทอร์เน็ตในงานธุรกิจดิจิทัล</p>
+
+    <div id="loginStatus" class="login-status">
+      <span class="spinner-border spinner-border-sm"></span>
+      กำลังพาไปเข้าสู่ระบบด้วย LINE...
+    </div>
+
+    <a id="loginBtn" class="btn btn-line w-100 mt-3 d-none" href="/api/auth/login">
+      <i class="fa-brands fa-line"></i> เข้าสู่ระบบด้วย LINE
+    </a>
+
+    <div id="loginError" class="alert alert-danger mt-3 d-none small"></div>
+
+    <div class="login-foot">
+      <i class="fa-solid fa-lock"></i> ระบบขอเพียงชื่อและรูปโปรไฟล์จาก LINE เพื่อบันทึกผลการเรียน
+    </div>
+  </div>
+</div>
+
+<!-- ===================== แอปหลัก ===================== -->
+<div id="app" class="d-none">
+
+  <header class="app-header">
+    <div class="container-narrow">
+      <div class="profile-row">
+        <div class="avatar-wrap">
+          <img id="pfPic" class="avatar" alt="โปรไฟล์">
+          <span id="pfLevelBadge" class="level-chip">Lv.1</span>
+        </div>
+        <div class="flex-grow-1 min-w-0">
+          <div class="pf-hello">สวัสดี</div>
+          <div id="pfName" class="pf-name">ผู้เรียน</div>
+          <div id="pfLevelName" class="pf-level"><i class="fa-solid fa-seedling"></i> ผู้เริ่มต้นออนไลน์</div>
+        </div>
+        <div class="text-end">
+          <div class="pf-points"><i class="fa-solid fa-coins"></i> <span id="pfPoints">0</span></div>
+          <div class="pf-points-label">คะแนนสะสม</div>
+          <button class="btn btn-logout mt-2" onclick="doLogout()" title="ออกจากระบบ">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="level-progress">
+        <div class="d-flex justify-content-between small mb-1">
+          <span id="lvFrom">ระดับปัจจุบัน</span>
+          <span id="lvTo">ระดับถัดไป</span>
+        </div>
+        <div class="progress">
+          <div id="lvBar" class="progress-bar" style="width:0%"></div>
+        </div>
+        <div id="lvRemain" class="lv-remain">อีก 0 แต้มถึงระดับถัดไป</div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box"><i class="fa-solid fa-book-open"></i><b id="stLessons">0/6</b><span>บทเรียนสำเร็จ</span></div>
+        <div class="stat-box"><i class="fa-solid fa-list-check"></i><b id="stMissions">0/8</b><span>ภารกิจสำเร็จ</span></div>
+        <div class="stat-box"><i class="fa-solid fa-medal"></i><b id="stBadges">0</b><span>Badge</span></div>
+        <div class="stat-box"><i class="fa-solid fa-ranking-star"></i><b id="stRank">-</b><span>อันดับ</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tab-nav">
+    <div class="container-narrow tab-scroll">
+      <button class="tab-btn active" data-tab="checkin"><i class="fa-solid fa-calendar-check"></i> เช็คอิน</button>
+      <button class="tab-btn" data-tab="lesson"><i class="fa-solid fa-book"></i> บทเรียน</button>
+      <button class="tab-btn" data-tab="quiz"><i class="fa-solid fa-clipboard-question"></i> Quiz</button>
+      <button class="tab-btn" data-tab="badge"><i class="fa-solid fa-medal"></i> Badge</button>
+      <button class="tab-btn" data-tab="rank"><i class="fa-solid fa-trophy"></i> อันดับ</button>
+    </div>
+  </nav>
+
+  <main class="container-narrow app-main">
+
+    <!-- ---------- เช็คอิน ---------- -->
+    <section id="tab-checkin" class="tab-pane-x">
+      <div class="card-x checkin-card">
+        <div class="checkin-flame"><i class="fa-solid fa-fire"></i></div>
+        <div class="checkin-streak"><span id="ckStreak">0</span> <small>วันติดต่อกัน</small></div>
+        <p class="checkin-hint" id="ckHint">เช็คอินทุกวันเพื่อรับแต้มเพิ่มขึ้นเรื่อย ๆ</p>
+        <button id="ckBtn" class="btn btn-grad btn-lg w-100" onclick="doCheckin()">
+          <i class="fa-solid fa-hand-sparkles"></i> เช็คอินวันนี้
+        </button>
+      </div>
+
+      <div class="card-x">
+        <h6 class="card-title-x"><i class="fa-solid fa-chart-column"></i> การเช็คอิน 14 วันล่าสุด</h6>
+        <canvas id="chartCheckin" height="150"></canvas>
+      </div>
+
+      <div class="card-x">
+        <h6 class="card-title-x"><i class="fa-solid fa-list-check"></i> ภารกิจของฉัน</h6>
+        <div id="missionList" class="mission-list"></div>
+      </div>
+    </section>
+
+    <!-- ---------- บทเรียน ---------- -->
+    <section id="tab-lesson" class="tab-pane-x d-none">
+      <div id="lessonList"></div>
+    </section>
+
+    <!-- ---------- Quiz ---------- -->
+    <section id="tab-quiz" class="tab-pane-x d-none">
+      <div id="quizHome">
+        <div class="card-x">
+          <h6 class="card-title-x"><i class="fa-solid fa-chart-simple"></i> คะแนนดีที่สุดรายหมวด</h6>
+          <canvas id="chartCategory" height="220"></canvas>
+        </div>
+        <h6 class="section-title">เลือกหมวดที่ต้องการทบทวน <span class="text-muted small">หมวดละ 10 ข้อ</span></h6>
+        <div id="quizCatList" class="cat-grid"></div>
+        <h6 class="section-title mt-4">ประวัติการทำ Quiz</h6>
+        <div id="quizHistory" class="history-list"></div>
+      </div>
+
+      <div id="quizRunner" class="d-none"></div>
+      <div id="quizResult" class="d-none"></div>
+    </section>
+
+    <!-- ---------- Badge ---------- -->
+    <section id="tab-badge" class="tab-pane-x d-none">
+      <div class="card-x">
+        <h6 class="card-title-x"><i class="fa-solid fa-medal"></i> เหรียญตราสะสม</h6>
+        <p class="text-muted small mb-3">สะสมเหรียญจากการเช็คอิน การเรียนบทเรียน และการทำ Quiz</p>
+        <div id="badgeGrid" class="badge-grid"></div>
+      </div>
+    </section>
+
+    <!-- ---------- อันดับ ---------- -->
+    <section id="tab-rank" class="tab-pane-x d-none">
+      <div id="podium" class="podium"></div>
+      <div class="card-x">
+        <h6 class="card-title-x"><i class="fa-solid fa-trophy"></i> อันดับคะแนนสูงสุด</h6>
+        <div id="rankList" class="rank-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-foot">
+    21910-2002 อินเทอร์เน็ตในงานธุรกิจดิจิทัล · เกณฑ์ผ่าน 60%
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

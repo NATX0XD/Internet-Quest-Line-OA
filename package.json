@@ -1,0 +1,14 @@
+{
+  "name": "internet-quest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ระบบการเรียนรู้เชื่อม LINE OA วิชา 21910-2002 อินเทอร์เน็ตในงานธุรกิจดิจิทัล",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  }
+}

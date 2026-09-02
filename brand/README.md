@@ -16,6 +16,8 @@
 | `line-richmenu-2500x1686.jpg` | 2500×1686 · 260 KB | ภาพ Rich Menu |
 | `richmenu-areas.json` | — | พิกัดปุ่มสำหรับสร้าง Rich Menu ผ่าน Messaging API |
 | `ai-profile.jpg` / `ai-cover.jpg` / `ai-richmenu.jpg` | 1024×1024 | ภาพพื้นหลังที่ AI สร้าง ใช้เป็นเลเยอร์ล่างของทั้งสามใบ |
+| `fastwork-cover-1500x1000.jpg` | 1500×1000 · 337 KB | ภาพปกสำหรับลงประกาศรับงานบน Fastwork |
+| `shot-checkin.png` / `shot-quiz.png` | 390×844 | ภาพหน้าจอระบบจริง ใช้ประกอบภาพปก |
 
 ข้อกำหนดของ LINE ที่ยึดไว้
 
